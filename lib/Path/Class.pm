@@ -1,6 +1,6 @@
 package Path::Class;
 
-$VERSION = '0.05';
+$VERSION = '0.06';
 @ISA = qw(Exporter);
 @EXPORT    = qw(file dir);
 @EXPORT_OK = qw(file dir foreign_file foreign_dir);
@@ -99,7 +99,7 @@ using C<Path::Class>.
 Using C<Path::Class> can help solve real problems in your code too -
 for instance, how many people actually take the "volume" (like C<C:>
 on Windows) into account when writing C<File::Spec>-using code?  I
-thought not.  But if you use C<Path::Class>, your directory objects
+thought not.  But if you use C<Path::Class>, your file and directory objects
 will know what volumes they refer to and do the right thing.
 
 The guts of the C<Path::Class> code live in the C<Path::Class::File>
