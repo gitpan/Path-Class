@@ -11,16 +11,13 @@ use overload
 
 sub new {
   my $from = shift;
-  my $self;
-  if (ref $from) {
-    $self = bless {}, ref $from;
-    $self->{file_spec_class} = $from->{file_spec_class} if $from->{file_spec_class};
-  } else {
-    $self = bless {}, $from;
-    $self->{file_spec_class} = $Path::Class::Foreign if $Path::Class::Foreign;
-  }
-  return $self;
+  my ($class, $fs_class) = (ref($from)
+			    ? (ref $from, $from->{file_spec_class})
+			    : ($from, $Path::Class::Foreign));
+  return bless {file_spec_class => $fs_class}, $class;
 }
+
+sub is_dir { 0 }
 
 sub _spec_class {
   my ($class, $type) = @_;

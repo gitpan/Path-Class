@@ -1,5 +1,20 @@
 Revision history for Perl extension Path::Class.
 
+0.09  Tue Apr  5 20:42:20 CDT 2005
+
+ - Added the dir_list() method, which gives the user direct access to
+   the list of directories that makes up a Path::Class::Dir object
+   (NEEDS DOCUMENTATION). [Suggested by Smylers]
+
+ - Documented the behavior of $dir->next() when the directory doesn't
+   exist or is unreadable (it dies). [Smylers]
+
+ - Fixed a bug that could result in extra backslashes between the
+   volume and path (such as C:\\Foo\Bar). [Smylers]
+
+ - Added the is_dir() method, which is a simple way to tell the
+   difference between a file and a directory. [Suggested by Smylers]
+
 0.08  Tue Dec 28 08:26:56 CST 2004
 
  - Fixed a typo in the module name in the docs. [Chris Dolan]

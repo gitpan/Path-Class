@@ -7,7 +7,7 @@ use strict;
 use Path::Class;
 use Cwd;
 
-plan tests => 45;
+plan tests => 54;
 ok(1);
 
 my $file1 = Path::Class::File->new('foo.txt');
@@ -88,4 +88,35 @@ ok $file->parent, '/foo/baz';
   ok $file->relative('/tmp/foo'), 'bar.txt';
   ok $file->relative('/tmp/'), 'foo/bar.txt';
   ok $file->relative('/tmp/foo/'), 'bar.txt';
+}
+
+{
+  # Try out the dir_list() method
+  my $dir = dir('one/two/three/four/five');
+  my @d = $dir->dir_list();
+  ok "@d", "one two three four five";
+
+  @d = $dir->dir_list(2);
+  ok "@d", "three four five";
+
+  @d = $dir->dir_list(-2);
+  ok "@d", "four five";
+
+  @d = $dir->dir_list(2, 2);
+  ok "@d", "three four", "dir_list(2, 2)";
+
+  @d = $dir->dir_list(-3, 2);
+  ok "@d", "three four", "dir_list(-3, 2)";
+
+  @d = $dir->dir_list(-3, -2);
+  ok "@d", "three", "dir_list(-3, -2)";
+
+  @d = $dir->dir_list(-3, -1);
+  ok "@d", "three four", "dir_list(-3, -1)";
+}
+
+{
+  # Test is_dir()
+  ok  dir('foo')->is_dir, 1;
+  ok file('foo')->is_dir, 0;
 }

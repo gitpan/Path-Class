@@ -3,6 +3,7 @@ package Path::Class::Dir;
 use strict;
 use Path::Class::File;
 use Path::Class::Entity;
+use Carp();
 use base qw(Path::Class::Entity);
 
 use IO::Dir ();
@@ -18,10 +19,12 @@ sub new {
 	      );
   
   ($self->{volume}, my $dirs) = $s->splitpath( $s->canonpath($first) , 1);
-  $self->{dirs} = [map $s->splitdir($_), $dirs, @_];
+  $self->{dirs} = [$s->splitdir($s->catdir($dirs, @_))];
 
   return $self;
 }
+
+sub is_dir { 1 }
 
 sub as_foreign {
   my ($self, $type) = @_;
@@ -51,6 +54,23 @@ sub volume { shift()->{volume} }
 sub file {
   local $Path::Class::Foreign = $_[0]->{file_spec_class} if $_[0]->{file_spec_class};
   return Path::Class::File->new(@_);
+}
+
+sub dir_list {
+  my $self = shift;
+  my $d = $self->{dirs};
+  return @$d unless @_;
+  
+  my $offset = shift;
+  if ($offset < 0) { $offset = $#$d + $offset + 1 }
+
+  unless (@_) {
+    return wantarray ? @$d[$offset .. $#$d] : $#$d - $offset;
+  }
+
+  my $length = shift;
+  if ($length < 0) { $length = $#$d + $length + 1 - $offset }
+  return wantarray ? @$d[$offset .. $length + $offset - 1] : $length;
 }
 
 sub subdir {
@@ -91,7 +111,7 @@ sub rmtree { File::Path::rmtree(shift()->stringify, @_) }
 sub next {
   my $self = shift;
   unless ($self->{dh}) {
-    $self->{dh} = $self->open or die "Can't open directory $self: $!";
+    $self->{dh} = $self->open or Carp::croak( "Can't open directory $self: $!" );
   }
   
   my $next = $self->{dh}->read;
@@ -221,6 +241,12 @@ Returns the volume (e.g. C<C:> on Windows, C<Macintosh HD:> on Mac OS,
 etc.) of the directory object, if any.  Otherwise, returns the empty
 string.
 
+=item $dir->is_dir
+
+Returns a boolean value indicating whether this object represents a
+directory.  Not surprisingly, C<Path::Class::File> objects always
+return false, and C<Path::Class::Dir> objects always return true.
+
 =item $dir->is_absolute
 
 Returns true or false depending on whether the directory refers to an
@@ -315,6 +341,22 @@ there is a subclass of C<File::Spec>.
 The arguments in C<@args> are the same as they would be specified in
 C<new()>.
 
+=item @list = $dir->dir_list([OFFSET, [LENGTH]])
+
+Returns the list of strings internally representing this directory
+structure.  Each successive member of the list is understood to be an
+entry in its predecessor's directory list.  By contract, C<<
+Path::Class->new( $dir->dir_list ) >> should be equivalent to C<$dir>.
+
+The semantics of this method are similar to Perl's C<splice> or
+C<substr> functions; they return C<LENGTH> elements starting at
+C<OFFSET>.  If C<LENGTH> is omitted, returns all the elements starting
+at C<OFFSET> up to the end of the list.  If C<LENGTH> is negative,
+returns the elements from C<OFFSET> onward except for C<-LENGTH>
+elements at the end.  If C<OFFSET> is negative, it counts backward
+C<OFFSET> elements from the end of the list.  If C<OFFSET> and
+C<LENGTH> are both omitted, the entire list is returned.
+
 =item $fh = $dir->open()
 
 Passes C<$dir> to C<< IO::Dir->open >> and returns the result as an
@@ -347,6 +389,10 @@ over all the regular files in a directory:
     my $fh = $file->open('r') or die "Can't read $file: $!";
     ...
   }
+
+If an error occurs when opening the directory (for instance, it
+doesn't exist or isn't readable), C<next()> will throw an exception
+with the value of C<$!>.
 
 =back
 
