@@ -4,7 +4,8 @@ BEGIN {
 
 use Test;
 use strict;
-use Path::Class qw(file dir);
+use Path::Class;
+use Cwd;
 
 plan tests => 39;
 ok(1);
@@ -68,7 +69,7 @@ ok $file->dir, '/foo/baz';
   ok dir(''), '/';
   ok dir(), '.';
   ok dir('', 'var', 'tmp'), '/var/tmp';
-  ok dir()->absolute, Cwd::cwd;
+  ok dir()->absolute, dir(Cwd::cwd())->cleanup;
 }
 
 {

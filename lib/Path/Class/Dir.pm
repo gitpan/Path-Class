@@ -46,7 +46,6 @@ sub stringify {
 		     '');
 }
 
-sub is_dir { 1 }
 sub volume { shift()->{volume} }
 
 sub file {
@@ -86,8 +85,8 @@ sub parent {
 }
 
 sub open  { IO::Dir->new(@_) }
-sub mkpath { File::Path::mkpath(''.shift(), @_) }  # Must stringify first arg
-sub rmtree { File::Path::rmtree(''.shift(), @_) }  # Must stringify first arg
+sub mkpath { File::Path::mkpath(shift()->stringify, @_) }
+sub rmtree { File::Path::rmtree(shift()->stringify, @_) }
 
 sub next {
   my $self = shift;
@@ -302,6 +301,22 @@ there is a subclass of C<File::Spec>.
 
 The arguments in C<@args> are the same as they would be specified in
 C<new()>.
+
+=item $fh = $dir->open()
+
+Passes C<$dir> to C<< IO::Dir->open >> and returns the result as an
+C<IO::Dir> object.  If the opening fails, C<undef> is returned and
+C<$!> is set.
+
+=item $dir->mkpath($verbose, $mode)
+
+Passes all arguments, including C<$dir>, to C<< Path::Class::mkpath()
+>> and returns the result (a list of all directories created).
+
+=item $dir->rmtree($verbose, $cautious)
+
+Passes all arguments, including C<$dir>, to C<< Path::Class::rmtree()
+>> and returns the result (the number of files successfully deleted).
 
 =back
 

@@ -22,8 +22,6 @@ sub new {
   return $self;
 }
 
-sub is_dir { 0 }
-
 sub _spec_class {
   my ($class, $type) = @_;
 
@@ -41,7 +39,11 @@ sub new_foreign {
 
 sub _spec { $_[0]->{file_spec_class} || 'File::Spec' }
   
-sub is_absolute { $_[0]->_spec->file_name_is_absolute($_[0]) }
+sub is_absolute { 
+    # 5.6.0 has a bug with regexes and stringification that's ticked by
+    # file_name_is_absolute().  Help it along.
+    $_[0]->_spec->file_name_is_absolute($_[0]->stringify) 
+}
 
 sub cleanup {
   my $self = shift;
@@ -59,7 +61,7 @@ sub absolute {
 sub relative {
   my $self = shift;
   return $self unless $self->is_absolute;
-  return ref($self)->new($self->_spec->abs2rel($self, @_));
+  return ref($self)->new($self->_spec->abs2rel($self->stringify, @_));
 }
 
 1;

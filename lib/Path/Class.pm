@@ -1,7 +1,8 @@
 package Path::Class;
 
-$VERSION = '0.03_01';
+$VERSION = '0.04';
 @ISA = qw(Exporter);
+@EXPORT    = qw(file dir);
 @EXPORT_OK = qw(file dir foreign_file foreign_dir);
 
 use strict;
@@ -24,16 +25,16 @@ Path::Class - Cross-platform path specification manipulation
 
 =head1 SYNOPSIS
 
-  use Path::Class qw(file dir);  # Export a couple of short constructors
+  use Path::Class;
   
   my $dir  = dir('foo', 'bar');       # Path::Class::Dir object
   my $file = file('bob', 'file.txt'); # Path::Class::File object
   
+  # Stringifies to 'foo/bar' on Unix, 'foo\bar' on Windows, etc.
+  print "dir: $dir\n";
+  
   # Stringifies to 'bob/file.txt' on Unix, 'bob\file.txt' on Windows
   print "file: $file\n";
-  
-  # Stringifies to 'foo/bar' on Unix, 'foo\bar' on Windows
-  print "dir: $dir\n";
   
   my $subdir  = $dir->subdir('baz');  # foo/bar/baz
   my $parent  = $subdir->parent;      # foo/bar
@@ -46,6 +47,14 @@ Path::Class - Cross-platform path specification manipulation
   my $file = foreign_file('Mac', ':foo:file.txt');
   print $file->dir;                   # :foo:
   print $file->as_foreign('Win32');   # foo\file.txt
+  
+  # Interact with the underlying filesystem:
+  
+  # $dir_handle is an IO::Dir object
+  my $dir_handle = $dir->open or die "Can't read $dir: $!";
+  
+  # $file_handle is an IO::File object
+  my $file_handle = $file->open($mode) or die "Can't read $file: $!";
 
 =head1 DESCRIPTION
 
@@ -84,9 +93,8 @@ or even as
 
  my $absolute = file( @dirs, $file )->is_absolute;
 
-if you export the C<file> function into your namespace.  Similar
-readability improvements should happen all over the place when using
-C<Path::Class>.
+Similar readability improvements should happen all over the place when
+using C<Path::Class>.
 
 Using C<Path::Class> can help solve real problems in your code too -
 for instance, how many people actually take the "volume" (like C<C:>
@@ -100,7 +108,7 @@ modules' documentation for more details about how to use them.
 
 =head2 EXPORT
 
-The following functions can be exported upon request:
+The following functions are exported by default.
 
 =over 4
 
@@ -111,6 +119,15 @@ A synonym for C<< Path::Class::File->new >>.
 =item dir
 
 A synonym for C<< Path::Class::Dir->new >>.
+
+=back
+
+If you would like to prevent their export, you may explicitly pass an
+empty list to perl's C<use>, i.e. C<use Module::Build ()>.
+
+The following are exported only on demand.
+
+=over 4
 
 =item foreign_file
 
