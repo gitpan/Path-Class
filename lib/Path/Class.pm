@@ -1,8 +1,8 @@
 package Path::Class;
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 @ISA = qw(Exporter);
-@EXPORT_OK = qw(file dir);
+@EXPORT_OK = qw(file dir foreign_file foreign_dir);
 
 use strict;
 use Exporter;
@@ -11,6 +11,8 @@ use Path::Class::Dir;
 
 sub file { Path::Class::File->new(@_) }
 sub dir  { Path::Class::Dir ->new(@_) }
+sub foreign_file { Path::Class::File->new_foreign(@_) }
+sub foreign_dir  { Path::Class::Dir ->new_foreign(@_) }
 
 
 1;
@@ -39,6 +41,12 @@ Path::Class - Cross-platform path specification manipulation
   
   my $dir2 = $file->dir;              # bob
 
+  # Work with foreign paths
+  use Path::Class qw(foreign_file foreign_dir);
+  my $file = foreign_file('Mac', ':foo:file.txt');
+  print $file->dir;                   # :foo:
+  print $file->as_foreign('Win32');   # foo\file.txt
+
 =head1 DESCRIPTION
 
 The well-known module C<File::Spec> allows Perl programmers to
@@ -65,7 +73,7 @@ code:
 
 can be written using C<Path::Class> as
 
- my $absolute = Path::Class::File( @dirs, $file )->is_absolute;
+ my $absolute = Path::Class::File->new( @dirs, $file )->is_absolute;
 
 or even as 
 
@@ -87,6 +95,8 @@ modules' documentation for more details about how to use them.
 
 =head2 EXPORT
 
+The following functions can be exported upon request:
+
 =over 4
 
 =item file
@@ -96,6 +106,14 @@ A synonym for C<< Path::Class::File->new >>.
 =item dir
 
 A synonym for C<< Path::Class::Dir->new >>.
+
+=item foreign_file
+
+A synonym for C<< Path::Class::File->new_foreign >>.
+
+=item foreign_dir
+
+A synonym for C<< Path::Class::Dir->new_foreign >>.
 
 =back
 

@@ -1,7 +1,6 @@
 package Path::Class::File;
 
 use strict;
-use File::Spec;
 use Path::Class::Dir;
 use Path::Class::Entity;
 use base qw(Path::Class::Entity);
@@ -9,15 +8,12 @@ use base qw(Path::Class::Entity);
 sub new {
   my $self = shift->SUPER::new;
   my $file = pop();
-  my ($volume, $dirs, $base) = File::Spec->splitpath($file);
+  my @dirs = @_;
+
+  my ($volume, $dirs, $base) = $self->_spec->splitpath($file);
   
-  my @dirs;
   if (length $dirs) {
-    push @dirs, Path::Class::Dir->new(File::Spec->catpath($volume, $dirs, ''));
-  }
-  
-  if (@_) {
-    unshift @dirs, Path::Class::Dir->new(@_);
+    push @dirs, $self->_spec->catpath($volume, $dirs, '');
   }
   
   $self->{dir}  = @dirs ? Path::Class::Dir->new(@dirs) : undef;
@@ -26,16 +22,25 @@ sub new {
   return $self;
 }
 
+sub as_foreign {
+  my ($self, $type) = @_;
+  local $Path::Class::Foreign = $self->_spec_class($type);
+  my $foreign = ref($self)->SUPER::new;
+  $foreign->{dir} = $self->{dir}->as_foreign($type) if defined $self->{dir};
+  $foreign->{file} = $self->{file};
+  return $foreign;
+}
+
 sub stringify {
   my $self = shift;
   return $self->{file} unless defined $self->{dir};
-  return File::Spec->catfile($self->{dir}, $self->{file});
+  return $self->_spec->catfile($self->{dir}, $self->{file});
 }
 
 sub dir {
   my $self = shift;
   return $self->{dir} if defined $self->{dir};
-  return Path::Class::Dir->new(File::Spec->curdir);
+  return Path::Class::Dir->new($self->_spec->curdir);
 }
 
 sub volume {
@@ -150,12 +155,36 @@ containing this file.
 =item $abs = $file->absolute
 
 Returns a C<Path::Class::File> object representing C<$file> as an
-absolute path.
+absolute path.  An optional argument, given as either a string or a
+C<Path::Class::Dir> object, specifies the directory to use as the base
+of relativity - otherwise the current working directory will be used.
 
 =item $rel = $file->relative
 
 Returns a C<Path::Class::File> object representing C<$file> as a
-relative path.
+relative path.  An optional argument, given as either a string or a
+C<Path::Class::Dir> object, specifies the directory to use as the base
+of relativity - otherwise the current working directory will be used.
+
+=item $foreign = $file->as_foreign($type)
+
+Returns a C<Path::Class::File> object representing C<$file> as it would
+be specified on a system of type C<$type>.  Known types include
+C<Unix>, C<Win32>, C<Mac>, C<VMS>, and C<OS2>, i.e. anything for which
+there is a subclass of C<File::Spec>.
+
+Any generated objects (subdirectories, files, parents, etc.) will also
+retain this type.
+
+=item $foreign = Path::Class::File->new_foreign($type, @args)
+
+Returns a C<Path::Class::File> object representing a file as it would
+be specified on a system of type C<$type>.  Known types include
+C<Unix>, C<Win32>, C<Mac>, C<VMS>, and C<OS2>, i.e. anything for which
+there is a subclass of C<File::Spec>.
+
+The arguments in C<@args> are the same as they would be specified in
+C<new()>.
 
 =back
 
