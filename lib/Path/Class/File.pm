@@ -45,6 +45,7 @@ sub dir {
   return $self->{dir} if defined $self->{dir};
   return Path::Class::Dir->new($self->_spec->curdir);
 }
+BEGIN { *parent = \&dir; }
 
 sub volume {
   my $self = shift;
@@ -52,6 +53,7 @@ sub volume {
   return $self->{dir}->volume;
 }
 
+sub basename { shift->{file} }
 sub open  { IO::File->new(@_) }
 sub stat  { File::stat::stat("$_[0]") }
 sub lstat { File::stat::lstat("$_[0]") }
@@ -142,6 +144,11 @@ used in a string context, so the following are equivalent:
 Returns the volume (e.g. C<C:> on Windows, C<Macintosh HD:> on Mac OS,
 etc.) of the object, if any.  Otherwise, returns the empty string.
 
+=item $file->basename
+
+Returns the name of the file as a string, without the directory
+portion (if any).
+
 =item $file->is_absolute
 
 Returns true or false depending on whether the file refers to an
@@ -158,6 +165,10 @@ Performs a logical cleanup of the file path.  For instance:
 
 Returns a C<Path::Class::Dir> object representing the directory
 containing this file.
+
+=item $dir = $file->parent
+
+A synonym for the C<dir()> method.
 
 =item $abs = $file->absolute
 
