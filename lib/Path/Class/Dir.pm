@@ -106,6 +106,10 @@ sub open  { IO::Dir->new(@_) }
 sub mkpath { File::Path::mkpath(shift()->stringify, @_) }
 sub rmtree { File::Path::rmtree(shift()->stringify, @_) }
 
+sub remove {
+  rmdir( shift() );
+}
+
 sub next {
   my $self = shift;
   unless ($self->{dh}) {
@@ -122,6 +126,34 @@ sub next {
   my $file = $self->file($next);
   $file = $self->subdir($next) if -d $file;
   return $file;
+}
+
+sub subsumes {
+  my ($self, $other) = @_;
+  die "No second entity given to subsumes()" unless $other;
+  
+  $other = ref($self)->new($other) unless UNIVERSAL::isa($other, __PACKAGE__);
+  $other = $other->dir unless $other->is_dir;
+  
+  if ($self->is_absolute) {
+    $other = $other->absolute;
+  } elsif ($other->is_absolute) {
+    $self = $self->absolute;
+  }
+
+  $self = $self->cleanup;
+  $other = $other->cleanup;
+
+  if ($self->volume) {
+    return 0 unless $other->volume eq $self->volume;
+  }
+  
+  my $i = 0;
+  while ($i <= $#{ $self->{dirs} }) {
+    return 0 if $self->{dirs}[$i] ne $other->{dirs}[$i];
+    $i++;
+  }
+  return 1;
 }
 
 1;
@@ -319,6 +351,24 @@ relative path.  An optional argument, given as either a string or a
 C<Path::Class::Dir> object, specifies the directory to use as the base
 of relativity - otherwise the current working directory will be used.
 
+=item $boolean = $dir->subsumes($other)
+
+Returns true if this directory spec subsumes the other spec, and false
+otherwise.  Think of "subsumes" as "contains", but we only look at the
+I<specs>, not whether C<$dir> actually contains C<$other> on the
+filesystem.
+
+The C<$other> argument may be a C<Path::Class::Dir> object, a
+C<Path::Class::File> object, or a string.  In the latter case, we
+assume it's a directory.
+
+  # Examples:
+  dir('foo/bar' )->subsumes(dir('foo/bar/baz'))  # True
+  dir('/foo/bar')->subsumes(dir('/foo/bar/baz')) # True
+  dir('foo/bar' )->subsumes(dir('bar/baz'))      # False
+  dir('/foo/bar')->subsumes(dir('foo/bar'))      # False
+
+
 =item $foreign = $dir->as_foreign($type)
 
 Returns a C<Path::Class::Dir> object representing C<$dir> as it would
@@ -376,6 +426,13 @@ Passes all arguments, including C<$dir>, to C<< File::Path::mkpath()
 Passes all arguments, including C<$dir>, to C<< File::Path::rmtree()
 >> and returns the result (the number of files successfully deleted).
 
+=item $dir->remove()
+
+Removes the directory, which must be empty.  Returns a boolean value
+indicating whether or not the directory was successfully removed.
+This method is mainly provided for consistency with
+C<Path::Class::File>'s C<remove()> method.
+
 =item $dir_or_file = $dir->next()
 
 A convenient way to iterate through directory contents.  The first
@@ -396,6 +453,16 @@ over all the regular files in a directory:
 If an error occurs when opening the directory (for instance, it
 doesn't exist or isn't readable), C<next()> will throw an exception
 with the value of C<$!>.
+
+=item $st = $file->stat()
+
+Invokes C<< File::stat::stat() >> on this directory and returns a
+C<File::stat> object representing the result.
+
+=item $st = $file->lstat()
+
+Same as C<stat()>, but if C<$file> is a symbolic link, C<lstat()>
+stats the link instead of the directory the link points to.
 
 =back
 

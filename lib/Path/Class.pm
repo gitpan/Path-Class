@@ -1,6 +1,6 @@
 package Path::Class;
 
-$VERSION = '0.11';
+$VERSION = '0.12';
 @ISA = qw(Exporter);
 @EXPORT    = qw(file dir);
 @EXPORT_OK = qw(file dir foreign_file foreign_dir);
@@ -136,6 +136,25 @@ A synonym for C<< Path::Class::File->new_foreign >>.
 =item foreign_dir
 
 A synonym for C<< Path::Class::Dir->new_foreign >>.
+
+=back
+
+=head1 Notes on Cross-Platform Compatibility
+
+Although it is much easier to write cross-platform-friendly code with
+this module than with C<File::Spec>, there are still some issues to be
+aware of.
+
+=over 4
+
+=item *
+
+Some platforms, notably VMS and some older versions of DOS (I think),
+all filenames must have an extension.  Thus if you create a file
+called F<foo/bar> and then ask for a list of files in the directory
+F<foo>, you may find a file called F<bar.> instead of the F<bar> you
+were expecting.  Thus it might be a good idea to use an extension in
+the first place.
 
 =back
 

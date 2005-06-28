@@ -6,7 +6,6 @@ use Path::Class::Entity;
 use base qw(Path::Class::Entity);
 
 use IO::File ();
-use File::stat ();
 
 sub new {
   my $self = shift->SUPER::new;
@@ -55,17 +54,28 @@ sub volume {
 
 sub basename { shift->{file} }
 sub open  { IO::File->new(@_) }
-sub stat  { File::stat::stat("$_[0]") }
-sub lstat { File::stat::lstat("$_[0]") }
 
 sub openr { $_[0]->open('r') or die "Can't read $_[0]: $!"  }
 sub openw { $_[0]->open('w') or die "Can't write $_[0]: $!" }
 
 sub slurp {
-  my $self = shift;
-  my $fh = $self->open() or die "Can't open $self: $!";
+  my ($self, %args) = @_;
+  my $fh = $self->openr;
+
+  if ($args{chomped} or $args{chomp}) {
+    chomp( my @data = <$fh> );
+    return wantarray ? @data : join '', @data;
+  }
+
   local $/ unless wantarray;
   return <$fh>;
+}
+
+sub remove {
+  my $file = shift->stringify;
+  return unlink $file unless -e $file; # Sets $! correctly
+  1 while unlink $file;
+  return not -e $file;
 }
 
 1;
@@ -80,7 +90,7 @@ Path::Class::File - Objects representing files
   use Path::Class qw(file);  # Export a short constructor
   
   my $file = file('foo', 'bar.txt');  # Path::Class::File object
-  my $file = Path::Class::Dir->new('foo', 'bar.txt'); # Same thing
+  my $file = Path::Class::File->new('foo', 'bar.txt'); # Same thing
   
   # Stringifies to 'foo/bar.txt' on Unix, 'foo\bar.txt' on Windows, etc.
   print "file: $file\n";
@@ -106,7 +116,7 @@ file names in a cross-platform way.
 
 =over 4
 
-=item $file = Path::Class::Dir->new( <dir1>, <dir2>, ..., <file> )
+=item $file = Path::Class::File->new( <dir1>, <dir2>, ..., <file> )
 
 =item $file = file( <dir1>, <dir2>, ..., <file> )
 
@@ -245,6 +255,22 @@ In a scalar context, returns the contents of C<$file> in a string.  In
 a list context, returns the lines of C<$file> (according to how C<$/>
 is set) as a list.  If the file can't be read, this method will throw
 an exception.
+
+If you want C<chomp()> run on each line of the file, pass a true value
+for the C<chomp> or C<chomped> parameters:
+
+  my @lines = $file->slurp(chomp => 1);
+
+=item $file->remove()
+
+This method will remove the file in a way that works well on all
+platforms, and returns a boolean value indicating whether or not the
+file was successfully removed.  
+
+C<remove()> is better than simply calling Perl's C<unlink()> function,
+because on some platforms (notably VMS) you actually may need to call
+C<unlink()> several times before all versions of the file are gone -
+the C<remove()> method handles this process for you.
 
 =item $st = $file->stat()
 
