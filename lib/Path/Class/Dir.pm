@@ -102,6 +102,14 @@ sub parent {
   }
 }
 
+sub relative {
+  # File::Spec->abs2rel before version 3.13 returned the empty string
+  # when the two paths were equal - work around it here.
+  my $self = shift;
+  my $rel = $self->_spec->abs2rel($self->stringify, @_);
+  return $self->new( length $rel ? $rel : $self->_spec->curdir );
+}
+
 sub open  { IO::Dir->new(@_) }
 sub mkpath { File::Path::mkpath(shift()->stringify, @_) }
 sub rmtree { File::Path::rmtree(shift()->stringify, @_) }
@@ -205,6 +213,7 @@ sub subsumes {
   
   my $i = 0;
   while ($i <= $#{ $self->{dirs} }) {
+    return 0 unless exists $other->{dirs}[$i];
     return 0 if $self->{dirs}[$i] ne $other->{dirs}[$i];
     $i++;
   }
