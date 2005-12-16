@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name: Path-Class
-version: 0.14
+version: 0.15
 author:
   - Ken Williams, KWILLIAMS@cpan.org
 abstract: Cross-platform path specification manipulation
@@ -20,11 +20,15 @@ build_requires:
 provides:
   Path::Class:
     file: lib/Path/Class.pm
-    version: 0.14
+    version: 0.15
   Path::Class::Dir:
     file: lib/Path/Class/Dir.pm
   Path::Class::Entity:
     file: lib/Path/Class/Entity.pm
   Path::Class::File:
     file: lib/Path/Class/File.pm
-generated_by: Module::Build version 0.2702
+generated_by: Module::Build version 0.2703
+meta-spec:
+  url: |-
+    http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2
