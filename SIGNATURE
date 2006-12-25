@@ -1,12 +1,12 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.38.
+signed via the Module::Signature module, version 0.55.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
 
     % cpansign -v
 
-It would check each file's integrity, as well as the signature's
+It will check each file's integrity, as well as the signature's
 validity.  If "==> Signature verified OK! <==" is not displayed,
 the distribution may already have been compromised, and you should
 not run its Makefile.PL or Build.PL.
@@ -15,23 +15,23 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 ff25bd1bd186f15524216ea90a73b61bf0c7576d Build.PL
-SHA1 cffa5d57ef757a6b0ad9228eccc46ff36fb785ca Changes
+SHA1 0a3baa5c251bbbe345010ed0b0c50dd94628b140 Changes
 SHA1 066a2dba8084a0c2a7e4b6996ad21872bc16beb5 INSTALL
 SHA1 f38532f135ebd170454a00805504b38e89e0ae45 MANIFEST
-SHA1 7bf3f0aeaa00ff718a58f8e7945454ac0d908da5 META.yml
+SHA1 b04749f4f67233a07a4e44074244404e4c1b5270 META.yml
 SHA1 74dc0d49793be5f7fc8f13400c4ced4660c53135 Makefile.PL
 SHA1 a7b1cdcddb8679dff993b475939abcfb73076afb README
-SHA1 7569de171f742561a3a5f92441d3629ae99e9c1e lib/Path/Class.pm
-SHA1 3be0b4dadd51004c0f036a0d1386e4322f391629 lib/Path/Class/Dir.pm
+SHA1 0a6df8be8ef7f497a160ee49f26aa1e2a30a6eb3 lib/Path/Class.pm
+SHA1 e1803c5bcffbf1c53ecdd468676963bbce80121b lib/Path/Class/Dir.pm
 SHA1 0f444026e55bcf6214b3530fac4293e532426c1f lib/Path/Class/Entity.pm
 SHA1 22ee4a2d755d1258f725ecc615f99692afc17c0e lib/Path/Class/File.pm
 SHA1 add5b0ec80570448224a39e7f44f82f154018d0b t/01-basic.t
-SHA1 6eba68780139b5c67f1059bd773f4086dea2855f t/02-foreign.t
-SHA1 a501bb526504545a2badc63395ec53e98e1282c1 t/03-filesystem.t
+SHA1 d63e3614a5863588addbd1f2b095f5ecbd7d1ab6 t/02-foreign.t
+SHA1 2589396d46647a9b959f2ccc2b2bd0ce7723074c t/03-filesystem.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.4 (Darwin)
+Version: GnuPG v1.4.5 (Darwin)
 
-iD8DBQFDoiK4grvMBLfvlHYRAo9MAKDTPWCaxm0uAvys0JOvMwW2wsu0+ACfc0Cj
-CUcNTkpjxRgK2Y8seCu0Y/U=
-=dm19
+iD8DBQFFjzeKgrvMBLfvlHYRAtCoAJ4ujmUD5sdYRRAPP+ZtlbLabrtdOwCfdr2l
+D54xkhv9tdWiXlHbz1nkEnM=
+=0Zny
 -----END PGP SIGNATURE-----
