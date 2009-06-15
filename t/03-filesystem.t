@@ -1,26 +1,29 @@
 
 use strict;
 use Test::More;
-use Path::Class;
+use File::Temp qw(tmpnam tempdir);
+use File::Spec;
 
-plan tests => 64;
-ok 1;
+plan tests => 72;
 
-my $file = file('t', 'testfile');
-ok $file;
+use_ok 'Path::Class';
+
+
+my $file = file(scalar tmpnam());
+ok $file, "Got a filename via tmpnam()";
 
 {
   my $fh = $file->open('w');
-  ok $fh;
+  ok $fh, "Opened $file for writing";
   
-  ok print $fh "Foo\n";
+  ok print( $fh "Foo\n"), "Printed to $file";
 }
 
-ok -e $file;
+ok -e $file, "$file should exist";
 
 {
   my $fh = $file->open;
-  is scalar <$fh>, "Foo\n";
+  is scalar <$fh>, "Foo\n", "Read contents of $file correctly";
 }
 
 {
@@ -36,10 +39,8 @@ ok -e $file;
 ok not -e $file;
 
 
-my $dir = dir('t', 'testdir');
+my $dir = dir(tempdir(CLEANUP => 1));
 ok $dir;
-
-ok mkdir($dir, 0777);
 ok -d $dir;
 
 $file = $dir->file('foo.x');
@@ -48,20 +49,27 @@ ok -e $file;
 
 {
   my $dh = $dir->open;
-  ok $dh;
+  ok $dh, "Opened $dir for reading";
 
   my @files = readdir $dh;
   is scalar @files, 3;
   ok scalar grep { $_ eq 'foo.x' } @files;
 }
 
-ok $dir->rmtree;
-ok !-e $dir;
+ok $dir->rmtree, "Removed $dir";
+ok !-e $dir, "$dir no longer exists";
 
 {
   $dir = dir('t', 'foo', 'bar');
-  ok $dir->mkpath;
-  ok -d $dir;
+  $dir->parent->rmtree if -e $dir->parent;
+
+  ok $dir->mkpath, "Created $dir";
+  ok -d $dir, "$dir is a directory";
+
+  # Use a Unix sample path to test cleaning it up
+  my $ugly = Path::Class::Dir->new_foreign(Unix => 't/foo/..//foo/bar');
+  $ugly->resolve;
+  is $ugly->as_foreign('Unix'), 't/foo/bar';
   
   $dir = $dir->parent;
   ok $dir->rmtree;
@@ -74,15 +82,15 @@ ok !-e $dir;
   ok $dir->subdir('dir')->mkpath;
   ok -d $dir->subdir('dir');
   
-  ok $dir->file('file.x')->open('w');
-  ok $dir->file('0')->open('w');
+  ok $dir->file('file.x')->touch;
+  ok $dir->file('0')->touch;
   my @contents;
   while (my $file = $dir->next) {
     push @contents, $file;
   }
   is scalar @contents, 5;
 
-  my $joined = join ' ', map $_->basename, sort grep {-f $_} @contents;
+  my $joined = join ' ', sort map $_->basename, grep {-f $_} @contents;
   is $joined, '0 file.x';
   
   my ($subdir) = grep {$_ eq $dir->subdir('dir')} @contents;
@@ -93,6 +101,26 @@ ok !-e $dir;
   ok $file;
   is -d $file, '';
   
+  ok $dir->rmtree;
+  ok !-e $dir;
+
+
+  # Try again with directory called '0', in curdir
+  my $orig = dir()->absolute;
+
+  ok $dir->mkpath;
+  ok chdir($dir);
+  my $dir2 = dir();
+  ok $dir2->subdir('0')->mkpath;
+  ok -d $dir2->subdir('0');
+
+  @contents = ();
+  while (my $file = $dir2->next) {
+    push @contents, $file;
+  }
+  ok grep {$_ eq '0'} @contents;
+
+  ok chdir($orig);
   ok $dir->rmtree;
   ok !-e $dir;
 }

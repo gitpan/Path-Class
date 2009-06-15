@@ -13,12 +13,21 @@ my $b = Module::Build->new
 		'File::stat' => 0,
 		'File::Path' => 0,
 		'overload' => 0,
+		'Cwd' => 0,
 	       },
    build_requires => {
 		      'Test::More' => 0,
+		      'File::Temp' => 0,
 		     },
    create_makefile_pl => 'traditional',
    create_readme => 1,
+   meta_merge => {
+     resources => {
+       repository => 'http://perl-path-class.googlecode.com/svn/trunk',
+       homepage => 'http://code.google.com/p/perl-path-class',
+       bugtracker => 'http://rt.cpan.org/Public/Dist/Display.html?Name=Path-Class',
+     },
+   },
    sign => 1,
   );
 
