@@ -1,6 +1,6 @@
 package Path::Class::Dir;
 
-$VERSION = '0.17';
+$VERSION = '0.18';
 
 use strict;
 use Path::Class::File;
@@ -173,7 +173,7 @@ sub children {
   my $dh = $self->open or Carp::croak( "Can't open directory $self: $!" );
   
   my @out;
-  while (my $entry = $dh->read) {
+  while (defined(my $entry = $dh->read)) {
     # XXX What's the right cross-platform way to do this?
     next if (!$opts{all} && ($entry eq '.' || $entry eq '..'));
     push @out, $self->file($entry);
@@ -618,7 +618,7 @@ stats the link instead of the directory the link points to.
 
 =head1 AUTHOR
 
-Ken Williams, ken@mathforum.org
+Ken Williams, kwilliams@cpan.org
 
 =head1 SEE ALSO
 

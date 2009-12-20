@@ -1,6 +1,6 @@
 package Path::Class::File;
 
-$VERSION = '0.17';
+$VERSION = '0.18';
 
 use strict;
 use Path::Class::Dir;
@@ -321,7 +321,7 @@ stats the link instead of the file the link points to.
 
 =head1 AUTHOR
 
-Ken Williams, ken@mathforum.org
+Ken Williams, kwilliams@cpan.org
 
 =head1 SEE ALSO
 
