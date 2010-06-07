@@ -1,15 +1,19 @@
 package Path::Class::Dir;
 
-$VERSION = '0.18';
+$VERSION = '0.19';
 
 use strict;
 use Path::Class::File;
-use Path::Class::Entity;
 use Carp();
 use base qw(Path::Class::Entity);
 
 use IO::Dir ();
 use File::Path ();
+
+# updir & curdir on the local machine, for screening them out in
+# children().  Note that they don't respect 'foreign' semantics.
+my $Updir  = __PACKAGE__->_spec->updir;
+my $Curdir = __PACKAGE__->_spec->curdir;
 
 sub new {
   my $self = shift->SUPER::new();
@@ -32,6 +36,8 @@ sub new {
 
   return $self;
 }
+
+sub file_class { "Path::Class::File" }
 
 sub is_dir { 1 }
 
@@ -62,7 +68,7 @@ sub volume { shift()->{volume} }
 
 sub file {
   local $Path::Class::Foreign = $_[0]->{file_spec_class} if $_[0]->{file_spec_class};
-  return Path::Class::File->new(@_);
+  return $_[0]->file_class->new(@_);
 }
 
 sub dir_list {
@@ -174,12 +180,19 @@ sub children {
   
   my @out;
   while (defined(my $entry = $dh->read)) {
-    # XXX What's the right cross-platform way to do this?
-    next if (!$opts{all} && ($entry eq '.' || $entry eq '..'));
+    next if !$opts{all} && $self->_is_local_dot_dir($entry);
+    next if ($opts{no_hidden} && $entry =~ /^\./);
     push @out, $self->file($entry);
     $out[-1] = $self->subdir($entry) if -d $out[-1];
   }
   return @out;
+}
+
+sub _is_local_dot_dir {
+  my $self = shift;
+  my $dir  = shift;
+
+  return ($dir eq $Updir or $dir eq $Curdir);
 }
 
 sub next {
@@ -461,6 +474,13 @@ the C<all> parameter:
   @c = $dir->children(); # Just the children
   @c = $dir->children(all => 1); # All entries
 
+In addition, there's a C<no_hidden> parameter that will exclude all
+normally "hidden" entries - on Unix this means excluding all entries
+that begin with a dot (C<.>):
+
+  @c = $dir->children(no_hidden => 1); # Just normally-visible entries
+
+
 =item $abs = $dir->absolute
 
 Returns a C<Path::Class::Dir> object representing C<$dir> as an
@@ -613,6 +633,12 @@ C<File::stat> object representing the result.
 
 Same as C<stat()>, but if C<$file> is a symbolic link, C<lstat()>
 stats the link instead of the directory the link points to.
+
+=item $class = $file->file_class()
+
+Returns the class which should be used to create file objects.
+
+Generally overriden whenever this class is subclassed.
 
 =back
 

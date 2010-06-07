@@ -1,6 +1,6 @@
 package Path::Class::Entity;
 
-$VERSION = '0.18';
+$VERSION = '0.19';
 
 use strict;
 use File::Spec;
@@ -39,7 +39,7 @@ sub new_foreign {
   return $class->new(@_);
 }
 
-sub _spec { $_[0]->{file_spec_class} || 'File::Spec' }
+sub _spec { (ref($_[0]) && $_[0]->{file_spec_class}) || 'File::Spec' }
 
 sub boolify { 1 }
   

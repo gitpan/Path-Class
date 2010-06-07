@@ -1,6 +1,6 @@
 ---
 name: Path-Class
-version: 0.18
+version: 0.19
 author:
   - 'Ken Williams, KWILLIAMS@cpan.org'
 abstract: Cross-platform path specification manipulation
@@ -27,16 +27,16 @@ configure_requires:
 provides:
   Path::Class:
     file: lib/Path/Class.pm
-    version: 0.18
+    version: 0.19
   Path::Class::Dir:
     file: lib/Path/Class/Dir.pm
-    version: 0.18
+    version: 0.19
   Path::Class::Entity:
     file: lib/Path/Class/Entity.pm
-    version: 0.18
+    version: 0.19
   Path::Class::File:
     file: lib/Path/Class/File.pm
-    version: 0.18
+    version: 0.19
 generated_by: Module::Build version 0.34
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html

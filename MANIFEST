@@ -12,4 +12,5 @@ README
 t/01-basic.t
 t/02-foreign.t
 t/03-filesystem.t
+t/04-subclass.t
 SIGNATURE    Added here by Module::Build
