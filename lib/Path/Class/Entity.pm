@@ -1,6 +1,7 @@
 package Path::Class::Entity;
-
-$VERSION = '0.21';
+BEGIN {
+  $Path::Class::Entity::VERSION = '0.22';
+}
 
 use strict;
 use File::Spec;
@@ -84,3 +85,27 @@ sub stat  { File::stat::stat("$_[0]") }
 sub lstat { File::stat::lstat("$_[0]") }
 
 1;
+__END__
+
+=head1 NAME
+
+Path::Class:Entity - Base class for files and directories
+
+=head1 VERSION
+
+version 0.22
+
+=head1 DESCRIPTION
+
+This class is the base class for C<Path::Class::File> and
+C<Path::Class::Dir>, it is not used directly by callers.
+
+=head1 AUTHOR
+
+Ken Williams, kwilliams@cpan.org
+
+=head1 SEE ALSO
+
+Path::Class
+
+=cut

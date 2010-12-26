@@ -1,6 +1,7 @@
 package Path::Class::Dir;
-
-$VERSION = '0.21';
+BEGIN {
+  $Path::Class::Dir::VERSION = '0.22';
+}
 
 use strict;
 use Path::Class::File;
@@ -70,6 +71,8 @@ sub file {
   local $Path::Class::Foreign = $_[0]->{file_spec_class} if $_[0]->{file_spec_class};
   return $_[0]->file_class->new(@_);
 }
+
+sub basename { shift()->{dirs}[-1] }
 
 sub dir_list {
   my $self = shift;
@@ -257,6 +260,10 @@ __END__
 =head1 NAME
 
 Path::Class::Dir - Objects representing directories
+
+=head1 VERSION
+
+version 0.22
 
 =head1 SYNOPSIS
 

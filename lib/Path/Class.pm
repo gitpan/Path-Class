@@ -1,6 +1,8 @@
 package Path::Class;
+BEGIN {
+  $Path::Class::VERSION = '0.22';
+}
 
-$VERSION = '0.21';
 @ISA = qw(Exporter);
 @EXPORT    = qw(file dir);
 @EXPORT_OK = qw(file dir foreign_file foreign_dir);
@@ -22,6 +24,10 @@ __END__
 =head1 NAME
 
 Path::Class - Cross-platform path specification manipulation
+
+=head1 VERSION
+
+version 0.22
 
 =head1 SYNOPSIS
 

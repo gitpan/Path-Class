@@ -1,6 +1,7 @@
 package Path::Class::File;
-
-$VERSION = '0.21';
+BEGIN {
+  $Path::Class::File::VERSION = '0.22';
+}
 
 use strict;
 use Path::Class::Dir;
@@ -99,6 +100,10 @@ __END__
 =head1 NAME
 
 Path::Class::File - Objects representing files
+
+=head1 VERSION
+
+version 0.22
 
 =head1 SYNOPSIS
 

@@ -1,0 +1,14 @@
+^MANIFEST.
+^Makefile$
+^Build$
+^Makefile.old$
+^blib/
+^pm_to_blib$
+(^|/)\.svn
+^\.cvsignore$
+^\.releaserc$
+^\.lwpcookies$
+^t/file-spec-tests$
+~$
+^Path-Class
+^_build
