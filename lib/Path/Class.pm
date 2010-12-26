@@ -1,6 +1,6 @@
 package Path::Class;
 BEGIN {
-  $Path::Class::VERSION = '0.22';
+  $Path::Class::VERSION = '0.23';
 }
 
 @ISA = qw(Exporter);
@@ -27,7 +27,7 @@ Path::Class - Cross-platform path specification manipulation
 
 =head1 VERSION
 
-version 0.22
+version 0.23
 
 =head1 SYNOPSIS
 

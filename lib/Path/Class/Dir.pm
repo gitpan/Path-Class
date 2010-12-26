@@ -1,6 +1,6 @@
 package Path::Class::Dir;
 BEGIN {
-  $Path::Class::Dir::VERSION = '0.22';
+  $Path::Class::Dir::VERSION = '0.23';
 }
 
 use strict;
@@ -263,7 +263,7 @@ Path::Class::Dir - Objects representing directories
 
 =head1 VERSION
 
-version 0.22
+version 0.23
 
 =head1 SYNOPSIS
 
