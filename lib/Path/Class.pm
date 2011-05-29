@@ -1,13 +1,18 @@
+use strict;
+
 package Path::Class;
 BEGIN {
-  $Path::Class::VERSION = '0.23';
+  $Path::Class::VERSION = '0.24';
 }
 
-@ISA = qw(Exporter);
-@EXPORT    = qw(file dir);
-@EXPORT_OK = qw(file dir foreign_file foreign_dir);
+{
+  ## no critic
+  no strict 'vars';
+  @ISA = qw(Exporter);
+  @EXPORT    = qw(file dir);
+  @EXPORT_OK = qw(file dir foreign_file foreign_dir);
+}
 
-use strict;
 use Exporter;
 use Path::Class::File;
 use Path::Class::Dir;
@@ -27,7 +32,7 @@ Path::Class - Cross-platform path specification manipulation
 
 =head1 VERSION
 
-version 0.23
+version 0.24
 
 =head1 SYNOPSIS
 

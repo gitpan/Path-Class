@@ -1,9 +1,10 @@
+use strict;
+
 package Path::Class::File;
 BEGIN {
-  $Path::Class::File::VERSION = '0.23';
+  $Path::Class::File::VERSION = '0.24';
 }
 
-use strict;
 use Path::Class::Dir;
 use base qw(Path::Class::Entity);
 use Carp;
@@ -103,7 +104,7 @@ Path::Class::File - Objects representing files
 
 =head1 VERSION
 
-version 0.23
+version 0.24
 
 =head1 SYNOPSIS
 

@@ -1,34 +1,46 @@
 
-use Module::Build;
+use strict;
+use warnings;
 
-my $b = Module::Build->new
-  (
-   module_name => 'Path::Class',
-   license => 'perl',
-   requires => {
-		'File::Spec' => 0.87,
-		'File::Spec::Mac' => 1.3,
-		'IO::Dir' => 0,
-		'IO::File' => 0,
-		'File::stat' => 0,
-		'File::Path' => 0,
-		'overload' => 0,
-		'Cwd' => 0,
-	       },
-   build_requires => {
-		      'Test::More' => 0,
-		      'File::Temp' => 0,
-		     },
-   create_makefile_pl => 'traditional',
-   create_readme => 1,
-   meta_merge => {
-     resources => {
-       repository => 'http://perl-path-class.googlecode.com/svn/trunk',
-       homepage => 'http://code.google.com/p/perl-path-class',
-       bugtracker => 'http://rt.cpan.org/Public/Dist/Display.html?Name=Path-Class',
-     },
-   },
-   sign => 1,
-  );
+use Module::Build 0.3601;
 
-$b->create_build_script;
+
+my %module_build_args = (
+  'build_requires' => {
+    'Module::Build' => '0.3601',
+    'Test' => '0',
+    'Test::More' => '0'
+  },
+  'configure_requires' => {
+    'ExtUtils::MakeMaker' => '6.30',
+    'Module::Build' => '0.3601'
+  },
+  'dist_abstract' => 'Cross-platform path specification manipulation',
+  'dist_author' => [
+    'Ken Williams <kwilliams@cpan.org>'
+  ],
+  'dist_name' => 'Path-Class',
+  'dist_version' => '0.24',
+  'license' => 'perl',
+  'module_name' => 'Path::Class',
+  'recommends' => {},
+  'recursive_test_files' => 1,
+  'requires' => {
+    'Carp' => '0',
+    'Cwd' => '0',
+    'Exporter' => '0',
+    'File::Path' => '0',
+    'File::Spec' => '0.87',
+    'File::Temp' => '0',
+    'File::stat' => '0',
+    'IO::Dir' => '0',
+    'IO::File' => '0',
+    'overload' => '0'
+  },
+  'script_files' => []
+);
+
+
+my $build = Module::Build->new(%module_build_args);
+
+$build->create_build_script;

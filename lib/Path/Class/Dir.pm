@@ -1,15 +1,17 @@
+use strict;
+
 package Path::Class::Dir;
 BEGIN {
-  $Path::Class::Dir::VERSION = '0.23';
+  $Path::Class::Dir::VERSION = '0.24';
 }
 
-use strict;
 use Path::Class::File;
 use Carp();
 use base qw(Path::Class::Entity);
 
 use IO::Dir ();
 use File::Path ();
+use File::Temp ();
 
 # updir & curdir on the local machine, for screening them out in
 # children().  Note that they don't respect 'foreign' semantics.
@@ -207,6 +209,7 @@ sub next {
   my $next = $self->{dh}->read;
   unless (defined $next) {
     delete $self->{dh};
+    ## no critic
     return undef;
   }
   
@@ -254,6 +257,11 @@ sub contains {
   return !!(-d $self and (-e $other or -l $other) and $self->subsumes($other));
 }
 
+sub tempfile {
+  my $self = shift;
+  return File::Temp::tempfile(@_, DIR => $self->stringify);
+}
+
 1;
 __END__
 
@@ -263,7 +271,7 @@ Path::Class::Dir - Objects representing directories
 
 =head1 VERSION
 
-version 0.23
+version 0.24
 
 =head1 SYNOPSIS
 
@@ -589,6 +597,37 @@ Removes the directory, which must be empty.  Returns a boolean value
 indicating whether or not the directory was successfully removed.
 This method is mainly provided for consistency with
 C<Path::Class::File>'s C<remove()> method.
+
+=item $dir->tempfile(...)
+
+An interface to C<File::Temp>'s C<tempfile()> function.  Just like
+that function, if you call this in a scalar context, the return value
+is the filehandle and the file is C<unlink>ed as soon as possible
+(which is immediately on Unix-like platforms).  If called in a list
+context, the return values are the filehandle and the filename.
+
+The given directory is passed as the C<DIR> parameter.
+
+Here's an example of pretty good usage which doesn't allow race
+conditions, won't leave yucky tempfiles around on your filesystem,
+etc.:
+
+  my $fh = $dir->tempfile;
+  print $fh "Here's some data...\n";
+  seek($fh, 0, 0);
+  while (<$fh>) { do something... }
+
+Or in combination with a C<fork>:
+
+  my $fh = $dir->tempfile;
+  print $fh "Here's some more data...\n";
+  seek($fh, 0, 0);
+  if ($pid=fork()) {
+    wait;
+  } else {
+    something($_) while <$fh>;
+  }
+
 
 =item $dir_or_file = $dir->next()
 

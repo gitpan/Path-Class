@@ -1,6 +1,7 @@
 Build.PL
 Changes
 INSTALL
+LICENSE
 MANIFEST
 META.yml
 Makefile.PL
@@ -15,4 +16,4 @@ t/01-basic.t
 t/02-foreign.t
 t/03-filesystem.t
 t/04-subclass.t
-t/file-spec-tests
+t/author-critic.t

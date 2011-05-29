@@ -1,10 +1,11 @@
+use strict;
+
 package Path::Class::Entity;
 BEGIN {
-  $Path::Class::Entity::VERSION = '0.23';
+  $Path::Class::Entity::VERSION = '0.24';
 }
 
-use strict;
-use File::Spec;
+use File::Spec 0.87;
 use File::stat ();
 use Cwd;
 
@@ -30,6 +31,7 @@ sub _spec_class {
 
   die "Invalid system type '$type'" unless ($type) = $type =~ /^(\w+)$/;  # Untaint
   my $spec = "File::Spec::$type";
+  ## no critic
   eval "require $spec; 1" or die $@;
   return $spec;
 }
@@ -61,7 +63,8 @@ sub cleanup {
 
 sub resolve {
   my $self = shift;
-  my $cleaned = $self->new( Cwd::realpath($self->stringify) );
+  die $! unless -e $self;  # No such file or directory
+  my $cleaned = $self->new( scalar Cwd::realpath($self->stringify) );
 
   # realpath() always returns absolute path, kind of annoying
   $cleaned = $cleaned->relative if $self->is_relative;
@@ -93,7 +96,7 @@ Path::Class:Entity - Base class for files and directories
 
 =head1 VERSION
 
-version 0.23
+version 0.24
 
 =head1 DESCRIPTION
 
