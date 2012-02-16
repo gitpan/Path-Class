@@ -9,36 +9,39 @@ use ExtUtils::MakeMaker 6.30;
 
 
 my %WriteMakefileArgs = (
-  'ABSTRACT' => 'Cross-platform path specification manipulation',
-  'AUTHOR' => 'Ken Williams <kwilliams@cpan.org>',
-  'BUILD_REQUIRES' => {
-    'Module::Build' => '0.3601',
-    'Test' => '0',
-    'Test::More' => '0'
+  "ABSTRACT" => "Cross-platform path specification manipulation",
+  "AUTHOR" => "Ken Williams <kwilliams\@cpan.org>",
+  "BUILD_REQUIRES" => {
+    "Module::Build" => "0.3601",
+    "Test" => 0,
+    "Test::More" => 0,
+    "warnings" => 0
   },
-  'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.30',
-    'Module::Build' => '0.3601'
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30",
+    "Module::Build" => "0.3601"
   },
-  'DISTNAME' => 'Path-Class',
-  'EXE_FILES' => [],
-  'LICENSE' => 'perl',
-  'NAME' => 'Path::Class',
-  'PREREQ_PM' => {
-    'Carp' => '0',
-    'Cwd' => '0',
-    'Exporter' => '0',
-    'File::Path' => '0',
-    'File::Spec' => '0.87',
-    'File::Temp' => '0',
-    'File::stat' => '0',
-    'IO::Dir' => '0',
-    'IO::File' => '0',
-    'overload' => '0'
+  "DISTNAME" => "Path-Class",
+  "EXE_FILES" => [],
+  "LICENSE" => "perl",
+  "NAME" => "Path::Class",
+  "PREREQ_PM" => {
+    "Carp" => 0,
+    "Cwd" => 0,
+    "Exporter" => 0,
+    "File::Path" => 0,
+    "File::Spec" => "0.87",
+    "File::Temp" => 0,
+    "File::stat" => 0,
+    "IO::Dir" => 0,
+    "IO::File" => 0,
+    "base" => 0,
+    "overload" => 0,
+    "strict" => 0
   },
-  'VERSION' => '0.24',
-  'test' => {
-    'TESTS' => 't/*.t'
+  "VERSION" => "0.25",
+  "test" => {
+    "TESTS" => "t/*.t"
   }
 );
 

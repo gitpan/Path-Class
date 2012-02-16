@@ -1,8 +1,8 @@
 use strict;
 
 package Path::Class::Dir;
-BEGIN {
-  $Path::Class::Dir::VERSION = '0.24';
+{
+  $Path::Class::Dir::VERSION = '0.25';
 }
 
 use Path::Class::File;
@@ -138,6 +138,19 @@ sub remove {
   rmdir( shift() );
 }
 
+sub traverse {
+  my $self = shift;
+  my ($callback, @args) = @_;
+  my @children = $self->children;
+  return $self->$callback(
+    sub {
+      my @inner_args = @_;
+      return map { $_->traverse($callback, @inner_args) } @children;
+    },
+    @args
+  );
+}
+
 sub recurse {
   my $self = shift;
   my %opts = (preorder => 1, depthfirst => 0, @_);
@@ -271,7 +284,7 @@ Path::Class::Dir - Objects representing directories
 
 =head1 VERSION
 
-version 0.24
+version 0.25
 
 =head1 SYNOPSIS
 
@@ -649,6 +662,41 @@ over all the regular files in a directory:
 If an error occurs when opening the directory (for instance, it
 doesn't exist or isn't readable), C<next()> will throw an exception
 with the value of C<$!>.
+
+=item $dir->traverse( sub { ... }, @args )
+
+Calls the given callback for the root, passing it a continuation
+function which, when called, will call this recursively on each of its
+children. The callback function should be of the form:
+
+  sub {
+    my ($child, $cont, @args) = @_;
+    # ...
+  }
+
+For instance, to calculate the number of files in a directory, you
+can do this:
+
+  my $nfiles = $dir->traverse(sub {
+    my ($child, $cont) = @_;
+    return sum($cont->(), ($child->is_dir ? 0 : 1));
+  });
+
+or to calculate the maximum depth of a directory:
+
+  my $depth = $dir->traverse(sub {
+    my ($child, $cont, $depth) = @_;
+    return max($cont->($depth + 1), $depth);
+  }, 0);
+
+You can also choose not to call the callback in certain situations:
+
+  $dir->traverse(sub {
+    my ($child, $cont) = @_;
+    return if -l $child; # don't follow symlinks
+    # do something with $child
+    return $cont->();
+  });
 
 =item $dir->recurse( callback => sub {...} )
 

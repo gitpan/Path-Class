@@ -1,13 +1,14 @@
 use strict;
 
 package Path::Class::Entity;
-BEGIN {
-  $Path::Class::Entity::VERSION = '0.24';
+{
+  $Path::Class::Entity::VERSION = '0.25';
 }
 
 use File::Spec 0.87;
 use File::stat ();
 use Cwd;
+use Carp();
 
 use overload
   (
@@ -63,7 +64,7 @@ sub cleanup {
 
 sub resolve {
   my $self = shift;
-  die $! unless -e $self;  # No such file or directory
+  Carp::croak($!) unless -e $self;  # No such file or directory
   my $cleaned = $self->new( scalar Cwd::realpath($self->stringify) );
 
   # realpath() always returns absolute path, kind of annoying
@@ -96,7 +97,7 @@ Path::Class:Entity - Base class for files and directories
 
 =head1 VERSION
 
-version 0.24
+version 0.25
 
 =head1 DESCRIPTION
 

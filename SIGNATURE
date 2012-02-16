@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.66.
+signed via the Module::Signature module, version 0.68.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,28 +14,30 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 ea792bf52b566bff462a76a5d4d50433e0b527ea Build.PL
-SHA1 247c8647d187a81327719ee36cf6d4f9703db733 Changes
-SHA1 066a2dba8084a0c2a7e4b6996ad21872bc16beb5 INSTALL
-SHA1 da0b89eff79e9d5128ab28d63e099b840cca39bf LICENSE
-SHA1 52cb7d3f48ff3c95c8459535d1bd6e123ec44501 MANIFEST
-SHA1 fb09dac402763a91c50f3e1949a51813f509afdb META.yml
-SHA1 ce72ebc3d68832477effb18bc248d92211874f14 Makefile.PL
-SHA1 243b575c9d7769d2cfd29c189ec2be8c883c4ece README
-SHA1 a6ebbb825cd8d9c406a02ac08f3b7680d5d285f2 dist.ini
-SHA1 07aaa412631cc8e6ea4276b3f3ea1fffbe5065f5 lib/Path/Class.pm
-SHA1 8d6415121b20b7a701290105646ac48f0f691b5b lib/Path/Class/Dir.pm
-SHA1 0549c1d2150621445a31f7688b2f5a878bb662f2 lib/Path/Class/Entity.pm
-SHA1 8193c8bd639e4e5c01bbaf4f173970fa3a992507 lib/Path/Class/File.pm
+SHA1 b0e7caad5afe531b3c9dbb6946d4d62d40fb64ea Build.PL
+SHA1 c019faeb9674c167d60997e6e4321f7de7ac7096 Changes
+SHA1 3baefa5156f90435f40c793b7f071e2f89a74006 INSTALL
+SHA1 b33df3650303ca968f350ac6a976f34f41762851 LICENSE
+SHA1 e0b6ae90f3672e071e3e8d77f1d100dda38e9c24 MANIFEST
+SHA1 5aefe0dfeafcb343beb080a3f6c7297131fef7ae META.yml
+SHA1 9186a51736835d4795e0ff71dd7e1d1c95fea61d Makefile.PL
+SHA1 fb3fff92bcd540665c40fea342f8377c72d5d597 README
+SHA1 b56785d5c081896083dc4398194e1286e68371a0 dist.ini
+SHA1 58a9698bacf9f6d62356a31a7b10b46b7b411910 lib/Path/Class.pm
+SHA1 6240803f25d3c7a5b2589e8a82c3684096e6294c lib/Path/Class/Dir.pm
+SHA1 7fd839b0aa96c90489b62504ddf993883dd5575d lib/Path/Class/Entity.pm
+SHA1 323141c5eefea8cc3f55f0106f54fd4db508131c lib/Path/Class/File.pm
 SHA1 212c128d87fa012c36016210e6e9213112fc3c23 t/01-basic.t
 SHA1 a42f4b07e4c42e7a59b960b13c5466d7cd82e17a t/02-foreign.t
 SHA1 ff702cdbf0bb4c25959cbc5a5c7db17772b7aa5b t/03-filesystem.t
 SHA1 a163d4cf70142b45974ed39c78571e7ce2ba5a7f t/04-subclass.t
+SHA1 a154070d2cb1369f6cebf4228742edea39c43c63 t/05-traverse.t
 SHA1 fa45d6e6ab1cd421349dea4ef527bfd5cdc8a09e t/author-critic.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.6 (Darwin)
+Version: GnuPG/MacGPG2 v2.0.17 (Darwin)
+Comment: GPGTools - http://gpgtools.org
 
-iD8DBQFN4acwgrvMBLfvlHYRAmIXAKC4w/k04B/Pm3pj3AUHDLUBxEKmFgCgpr+J
-vFWvOuqcL5jRV9XPXUxGOCI=
-=+Fzk
+iEYEARECAAYFAk88cFsACgkQgrvMBLfvlHboawCgw86uYQhnD3A06Nec9W1ZKD2a
+04kAmwbu2yyS2/XXyhHa+ql9R79+V1lS
+=UPVQ
 -----END PGP SIGNATURE-----

@@ -1,8 +1,8 @@
 use strict;
 
 package Path::Class;
-BEGIN {
-  $Path::Class::VERSION = '0.24';
+{
+  $Path::Class::VERSION = '0.25';
 }
 
 {
@@ -32,7 +32,7 @@ Path::Class - Cross-platform path specification manipulation
 
 =head1 VERSION
 
-version 0.24
+version 0.25
 
 =head1 SYNOPSIS
 
@@ -160,7 +160,7 @@ aware of.
 
 =item *
 
-Some platforms, notably VMS and some older versions of DOS (I think),
+On some platforms, notably VMS and some older versions of DOS (I think),
 all filenames must have an extension.  Thus if you create a file
 called F<foo/bar> and then ask for a list of files in the directory
 F<foo>, you may find a file called F<bar.> instead of the F<bar> you
