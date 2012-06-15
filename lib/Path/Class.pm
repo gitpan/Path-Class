@@ -2,7 +2,7 @@ use strict;
 
 package Path::Class;
 {
-  $Path::Class::VERSION = '0.25';
+  $Path::Class::VERSION = '0.26';
 }
 
 {
@@ -32,7 +32,7 @@ Path::Class - Cross-platform path specification manipulation
 
 =head1 VERSION
 
-version 0.25
+version 0.26
 
 =head1 SYNOPSIS
 

@@ -8,6 +8,7 @@ Makefile.PL
 README
 SIGNATURE
 dist.ini
+f.pl
 lib/Path/Class.pm
 lib/Path/Class/Dir.pm
 lib/Path/Class/Entity.pm

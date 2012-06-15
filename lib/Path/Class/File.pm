@@ -2,7 +2,7 @@ use strict;
 
 package Path::Class::File;
 {
-  $Path::Class::File::VERSION = '0.25';
+  $Path::Class::File::VERSION = '0.26';
 }
 
 use Path::Class::Dir;
@@ -62,7 +62,8 @@ sub basename { shift->{file} }
 sub open  { IO::File->new(@_) }
 
 sub openr { $_[0]->open('r') or croak "Can't read $_[0]: $!"  }
-sub openw { $_[0]->open('w') or croak "Can't write $_[0]: $!" }
+sub openw { $_[0]->open('w') or croak "Can't write to $_[0]: $!" }
+sub opena { $_[0]->open('a') or croak "Can't append to $_[0]: $!" }
 
 sub touch {
   my $self = shift;
@@ -88,6 +89,26 @@ sub slurp {
   return <$fh>;
 }
 
+sub spew {
+    my $self = shift;
+    my %args = splice( @_, 0, @_-1 );
+
+    my $iomode = $args{iomode} || 'w';
+    my $fh = $self->open( $iomode ) or croak "Can't write to $self: $!";
+
+    if (ref($_[0]) eq 'ARRAY') {
+        # Use old-school for loop to avoid copying.
+        for (my $i = 0; $i < @{ $_[0] }; $i++) {
+            print $fh $_[0]->[$i];
+        }
+    }
+    else {
+        print $fh $_[0];
+    }
+
+    return;
+}
+
 sub remove {
   my $file = shift->stringify;
   return unlink $file unless -e $file; # Sets $! correctly
@@ -110,7 +131,7 @@ Path::Class::File - Objects representing files
 
 =head1 VERSION
 
-version 0.25
+version 0.26
 
 =head1 SYNOPSIS
 
@@ -320,6 +341,23 @@ a I<reading> mode.
   my $lines = $file->slurp(iomode => '<:encoding(UTF−8)');
 
 The default C<iomode> is C<r>.
+
+=item $file->spew( $content );
+
+The opposite of L</slurp>, this takes a list of strings and prints them
+to the file in write mode.  If the file can't be written too, this method
+will throw an exception.
+
+The content to be written can be either an array ref or a plain scalar.
+If the content is an array ref then each entry in the array will be
+written to the file.
+
+You may use the C<iomode> parameter to pass in an IO mode to use when
+opening the file, just like L</slurp> supports.
+
+  $file->spew(iomode => '>:raw', $content);
+
+The default C<iomode> is C<w>.
 
 =item $file->traverse(sub { ... }, @args)
 
