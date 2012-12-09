@@ -2,7 +2,7 @@ use strict;
 
 package Path::Class;
 {
-  $Path::Class::VERSION = '0.26';
+  $Path::Class::VERSION = '0.27';
 }
 
 {
@@ -10,17 +10,19 @@ package Path::Class;
   no strict 'vars';
   @ISA = qw(Exporter);
   @EXPORT    = qw(file dir);
-  @EXPORT_OK = qw(file dir foreign_file foreign_dir);
+  @EXPORT_OK = qw(file dir foreign_file foreign_dir tempdir);
 }
 
 use Exporter;
 use Path::Class::File;
 use Path::Class::Dir;
+use File::Temp ();
 
 sub file { Path::Class::File->new(@_) }
 sub dir  { Path::Class::Dir ->new(@_) }
 sub foreign_file { Path::Class::File->new_foreign(@_) }
 sub foreign_dir  { Path::Class::Dir ->new_foreign(@_) }
+sub tempdir { Path::Class::Dir->new(File::Temp::tempdir(@_)) }
 
 
 1;
@@ -32,7 +34,7 @@ Path::Class - Cross-platform path specification manipulation
 
 =head1 VERSION
 
-version 0.26
+version 0.27
 
 =head1 SYNOPSIS
 
@@ -147,6 +149,14 @@ A synonym for C<< Path::Class::File->new_foreign >>.
 =item foreign_dir
 
 A synonym for C<< Path::Class::Dir->new_foreign >>.
+
+=item tempdir
+
+Create a new Path::Class::Dir instance pointed to temporary directory.
+
+  my $temp = Path::Class::tempdir(CLEANUP => 1);
+
+A synonym for C<< Path::Class::Dir->new(File::Temp::tempdir(@_)) >>.
 
 =back
 

@@ -2,7 +2,7 @@ use strict;
 
 package Path::Class::Dir;
 {
-  $Path::Class::Dir::VERSION = '0.26';
+  $Path::Class::Dir::VERSION = '0.27';
 }
 
 use Path::Class::File;
@@ -151,6 +151,19 @@ sub traverse {
   );
 }
 
+sub traverse_if {
+  my $self = shift;
+  my ($callback, $condition, @args) = @_;
+  my @children = grep { $condition->($_) } $self->children;
+  return $self->$callback(
+    sub {
+      my @inner_args = @_;
+      return map { $_->traverse_if($callback, $condition, @inner_args) } @children;
+    },
+    @args
+  );
+}
+
 sub recurse {
   my $self = shift;
   my %opts = (preorder => 1, depthfirst => 0, @_);
@@ -165,14 +178,18 @@ sub recurse {
     $opts{depthfirst} && $opts{preorder}
     ? sub {
       my $dir = shift;
-      $callback->($dir);
-      unshift @queue, $dir->children;
+      my $ret = $callback->($dir);
+      unless( ($ret||'') eq $self->PRUNE ) {
+          unshift @queue, $dir->children;
+      }
     }
     : $opts{preorder}
     ? sub {
       my $dir = shift;
-      $callback->($dir);
-      push @queue, $dir->children;
+      my $ret = $callback->($dir);
+      unless( ($ret||'') eq $self->PRUNE ) {
+          push @queue, $dir->children;
+      }
     }
     : sub {
       my $dir = shift;
@@ -284,7 +301,7 @@ Path::Class::Dir - Objects representing directories
 
 =head1 VERSION
 
-version 0.26
+version 0.27
 
 =head1 SYNOPSIS
 
@@ -400,6 +417,10 @@ used in a string context, so the following are equivalent:
 Returns the volume (e.g. C<C:> on Windows, C<Macintosh HD:> on Mac OS,
 etc.) of the directory object, if any.  Otherwise, returns the empty
 string.
+
+=item $dir->basename
+
+Returns the last directory name of the path as a string.
 
 =item $dir->is_dir
 
@@ -698,6 +719,33 @@ You can also choose not to call the callback in certain situations:
     return $cont->();
   });
 
+=item $dir->traverse_if( sub { ... }, sub { ... }, @args )
+
+traverse with additional "should I visit this child" callback.
+Particularly useful in case examined tree contains inaccessible
+directories.
+
+Canonical example:
+
+  $dir->traverse_if(
+    sub {
+       my ($child, $cont) = @_;
+       # do something with $child
+       return $cont->();
+    }, 
+    sub {
+       my ($child) = @_;
+       # Process only readable items
+       return -r $child;
+    });
+
+Second callback gets single parameter: child. Only children for
+which it returns true will be processed by the first callback.
+
+Remaining parameters are interpreted as in traverse, in particular
+C<traverse_if(callback, sub { 1 }, @args> is equivalent to
+C<traverse(callback, @args);
+
 =item $dir->recurse( callback => sub {...} )
 
 Iterates through this directory and all of its children, and all of
@@ -717,6 +765,13 @@ C<preorder> that control the order of recursion.  The default is a
 preorder, breadth-first search, i.e. C<< depthfirst => 0, preorder => 1 >>.
 At the time of this writing, all combinations of these two parameters
 are supported I<except> C<< depthfirst => 0, preorder => 0 >>.
+
+C<callback> is normally not required to return any value. If it
+returns special constant C<Path::Class::Entity::PRUNE()> (more easily
+available as C<$item->PRUNE>),  no children of analyzed
+item will be analyzed (mostly as if you set C<$File::Find::prune=1>). Of course
+pruning is available only in C<preorder>, in postorder return value
+has no effect.
 
 =item $st = $file->stat()
 

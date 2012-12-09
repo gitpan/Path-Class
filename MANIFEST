@@ -18,4 +18,6 @@ t/02-foreign.t
 t/03-filesystem.t
 t/04-subclass.t
 t/05-traverse.t
+t/06-traverse_filt.t
+t/07-recurseprune.t
 t/author-critic.t

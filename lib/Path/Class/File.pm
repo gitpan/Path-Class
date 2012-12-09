@@ -2,7 +2,7 @@ use strict;
 
 package Path::Class::File;
 {
-  $Path::Class::File::VERSION = '0.26';
+  $Path::Class::File::VERSION = '0.27';
 }
 
 use Path::Class::Dir;
@@ -122,6 +122,12 @@ sub traverse {
   return $self->$callback(sub { () }, @args);
 }
 
+sub traverse_if {
+  my $self = shift;
+  my ($callback, $condition, @args) = @_;
+  return $self->$callback(sub { () }, @args);
+}
+
 1;
 __END__
 
@@ -131,7 +137,7 @@ Path::Class::File - Objects representing files
 
 =head1 VERSION
 
-version 0.26
+version 0.27
 
 =head1 SYNOPSIS
 
