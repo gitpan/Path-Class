@@ -2,7 +2,7 @@ use strict;
 
 package Path::Class::File;
 {
-  $Path::Class::File::VERSION = '0.27';
+  $Path::Class::File::VERSION = '0.28';
 }
 
 use Path::Class::Dir;
@@ -137,7 +137,7 @@ Path::Class::File - Objects representing files
 
 =head1 VERSION
 
-version 0.27
+version 0.28
 
 =head1 SYNOPSIS
 
@@ -181,24 +181,24 @@ arguments specify the path to the file.  Any volume may also be
 specified as the first argument, or as part of the first argument.
 You can use platform-neutral syntax:
 
-  my $dir = file( 'foo', 'bar', 'baz.txt' );
+  my $file = file( 'foo', 'bar', 'baz.txt' );
 
 or platform-native syntax:
 
-  my $dir = dir( 'foo/bar/baz.txt' );
+  my $file = file( 'foo/bar/baz.txt' );
 
 or a mixture of the two:
 
-  my $dir = dir( 'foo/bar', 'baz.txt' );
+  my $file = file( 'foo/bar', 'baz.txt' );
 
 All three of the above examples create relative paths.  To create an
 absolute path, either use the platform native syntax for doing so:
 
-  my $dir = dir( '/var/tmp/foo.txt' );
+  my $file = file( '/var/tmp/foo.txt' );
 
 or use an empty string as the first argument:
 
-  my $dir = dir( '', 'var', 'tmp', 'foo.txt' );
+  my $file = file( '', 'var', 'tmp', 'foo.txt' );
 
 If the second form seems awkward, that's somewhat intentional - paths
 like C</var/tmp> or C<\Windows> aren't cross-platform concepts in the
@@ -229,7 +229,7 @@ portion (if any).
 
 Returns a boolean value indicating whether this object represents a
 directory.  Not surprisingly, C<Path::Class::File> objects always
-return false, and C<Path::Class::Dir> objects always return true.
+return false, and L<Path::Class::Dir> objects always return true.
 
 =item $file->is_absolute
 
@@ -252,8 +252,8 @@ Performs a logical cleanup of the file path.  For instance:
 
 Performs a physical cleanup of the file path.  For instance:
 
-  my $dir = dir('/foo/baz/../foo.txt')->resolve;
-  # $dir now represents '/foo/foo.txt', assuming no symlinks
+  my $file = file('/foo/baz/../foo.txt')->resolve;
+  # $file now represents '/foo/foo.txt', assuming no symlinks
 
 This actually consults the filesystem to verify the validity of the
 path.
@@ -271,7 +271,7 @@ A synonym for the C<dir()> method.
 
 Returns a C<Path::Class::File> object representing C<$file> as an
 absolute path.  An optional argument, given as either a string or a
-C<Path::Class::Dir> object, specifies the directory to use as the base
+L<Path::Class::Dir> object, specifies the directory to use as the base
 of relativity - otherwise the current working directory will be used.
 
 =item $rel = $file->relative
@@ -305,7 +305,7 @@ C<new()>.
 
 Passes the given arguments, including C<$file>, to C<< IO::File->new >>
 (which in turn calls C<< IO::File->open >> and returns the result
-as an C<IO::File> object.  If the opening
+as an L<IO::File> object.  If the opening
 fails, C<undef> is returned and C<$!> is set.
 
 =item $fh = $file->openr()
@@ -318,7 +318,13 @@ A shortcut for
 
 A shortcut for
 
- $fh = $file->open('w') or croak "Can't write $file: $!";
+ $fh = $file->open('w') or croak "Can't write to $file: $!";
+
+=item $fh = $file->opena()
+
+A shortcut for
+
+ $fh = $file->open('a') or croak "Can't append to $file: $!";
 
 =item $file->touch
 
@@ -384,7 +390,7 @@ the C<remove()> method handles this process for you.
 =item $st = $file->stat()
 
 Invokes C<< File::stat::stat() >> on this file and returns a
-C<File::stat> object representing the result.
+L<File::stat> object representing the result.
 
 =item $st = $file->lstat()
 
@@ -405,6 +411,6 @@ Ken Williams, kwilliams@cpan.org
 
 =head1 SEE ALSO
 
-Path::Class, Path::Class::Dir, File::Spec
+L<Path::Class>, L<Path::Class::Dir>, L<File::Spec>
 
 =cut
