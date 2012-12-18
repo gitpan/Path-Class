@@ -2,7 +2,7 @@ use strict;
 
 package Path::Class::Dir;
 {
-  $Path::Class::Dir::VERSION = '0.28';
+  $Path::Class::Dir::VERSION = '0.29';
 }
 
 use Path::Class::File;
@@ -89,6 +89,11 @@ sub dir_list {
   my $length = shift;
   if ($length < 0) { $length = $#$d + $length + 1 - $offset }
   return @$d[$offset .. $length + $offset - 1];
+}
+
+sub components {
+  my $self = shift;
+  return $self->dir_list(@_);
 }
 
 sub subdir {
@@ -301,7 +306,7 @@ Path::Class::Dir - Objects representing directories
 
 =head1 VERSION
 
-version 0.28
+version 0.29
 
 =head1 SYNOPSIS
 
@@ -608,6 +613,14 @@ In a scalar context, C<dir_list()> with no arguments returns the
 number of entries in the directory list; C<dir_list(OFFSET)> returns
 the single element at that offset; C<dir_list(OFFSET, LENGTH)> returns
 the final element that would have been returned in a list context.
+
+=item $dir->components
+
+Identical to c<dir_list()>.  It exists because there's an analogous
+method C<dir_list()> in the C<Path::Class::File> class that also
+returns the basename string, so this method lets someone call
+C<components()> without caring whether the object is a file or a
+directory.
 
 =item $fh = $dir->open()
 

@@ -1,5 +1,13 @@
 Revision history for Perl extension Path::Class.
 
+0.29  Mon Dec 17 23:55:07 CST 2012
+
+ - Add components() method, which returns directory names (and
+   filename, if this is a File object) as a list.
+
+ - Fix a test failure on non-Unix platforms, the 07-recurseprune.t
+   test was written in a Unix-specific way.
+
 0.28  Sat Dec 15 21:40:17 CST 2012
 
  - Fix test failures when run as root - they were relying on

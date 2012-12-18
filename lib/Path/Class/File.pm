@@ -2,7 +2,7 @@ use strict;
 
 package Path::Class::File;
 {
-  $Path::Class::File::VERSION = '0.28';
+  $Path::Class::File::VERSION = '0.29';
 }
 
 use Path::Class::Dir;
@@ -56,6 +56,12 @@ sub volume {
   my $self = shift;
   return '' unless defined $self->{dir};
   return $self->{dir}->volume;
+}
+
+sub components {
+  my $self = shift;
+  die "Arguments are not currently supported by File->components()" if @_;
+  return ($self->dir->components, $self->basename);
 }
 
 sub basename { shift->{file} }
@@ -137,7 +143,7 @@ Path::Class::File - Objects representing files
 
 =head1 VERSION
 
-version 0.28
+version 0.29
 
 =head1 SYNOPSIS
 
@@ -224,6 +230,17 @@ etc.) of the object, if any.  Otherwise, returns the empty string.
 
 Returns the name of the file as a string, without the directory
 portion (if any).
+
+=item $file->components
+
+Returns a list of the directory components of this file, followed by
+the basename.
+
+Note: unlike C<< $dir->components >>, this method currently does not
+accept any arguments to select which elements of the list will be
+returned.  It may do so in the future.  Currently it throws an
+exception if such arguments are present.
+
 
 =item $file->is_dir
 

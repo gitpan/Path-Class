@@ -2,7 +2,7 @@ use strict;
 
 package Path::Class::Entity;
 {
-  $Path::Class::Entity::VERSION = '0.28';
+  $Path::Class::Entity::VERSION = '0.29';
 }
 
 use File::Spec 0.87;
@@ -99,7 +99,7 @@ Path::Class::Entity - Base class for files and directories
 
 =head1 VERSION
 
-version 0.28
+version 0.29
 
 =head1 DESCRIPTION
 
