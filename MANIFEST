@@ -6,6 +6,7 @@ MANIFEST
 META.yml
 Makefile.PL
 README
+README.pod
 SIGNATURE
 dist.ini
 lib/Path/Class.pm

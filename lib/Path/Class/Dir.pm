@@ -2,7 +2,7 @@ use strict;
 
 package Path::Class::Dir;
 {
-  $Path::Class::Dir::VERSION = '0.29';
+  $Path::Class::Dir::VERSION = '0.31';
 }
 
 use Path::Class::File;
@@ -12,6 +12,7 @@ use base qw(Path::Class::Entity);
 use IO::Dir ();
 use File::Path ();
 use File::Temp ();
+use Scalar::Util ();
 
 # updir & curdir on the local machine, for screening them out in
 # children().  Note that they don't respect 'foreign' semantics.
@@ -34,8 +35,22 @@ sub new {
 	       shift()
 	      );
   
-  ($self->{volume}, my $dirs) = $s->splitpath( $s->canonpath($first) , 1);
-  $self->{dirs} = [$s->splitdir($s->catdir($dirs, @_))];
+  $self->{dirs} = [];
+  if ( Scalar::Util::blessed($first) && $first->isa("Path::Class::Dir") ) {
+    $self->{volume} = $first->{volume};
+    push @{$self->{dirs}}, @{$first->{dirs}};
+  }
+  else {
+    ($self->{volume}, my $dirs) = $s->splitpath( $s->canonpath("$first") , 1);
+    push @{$self->{dirs}}, $s->splitdir($dirs);
+  }
+
+  push @{$self->{dirs}}, map {
+    Scalar::Util::blessed($_) && $_->isa("Path::Class::Dir")
+      ? @{$_->{dirs}}
+      : $s->splitdir($_)
+  } @_;
+
 
   return $self;
 }
@@ -108,7 +123,7 @@ sub parent {
 
   if ($self->is_absolute) {
     my $parent = $self->new($self);
-    pop @{$parent->{dirs}};
+    pop @{$parent->{dirs}} if @$dirs > 1;
     return $parent;
 
   } elsif ($self eq $curdir) {
@@ -306,7 +321,7 @@ Path::Class::Dir - Objects representing directories
 
 =head1 VERSION
 
-version 0.29
+version 0.31
 
 =head1 SYNOPSIS
 

@@ -2,7 +2,7 @@ use strict;
 
 package Path::Class::Entity;
 {
-  $Path::Class::Entity::VERSION = '0.29';
+  $Path::Class::Entity::VERSION = '0.31';
 }
 
 use File::Spec 0.87;
@@ -57,7 +57,7 @@ sub is_relative { ! $_[0]->is_absolute }
 
 sub cleanup {
   my $self = shift;
-  my $cleaned = $self->new( $self->_spec->canonpath($self) );
+  my $cleaned = $self->new( $self->_spec->canonpath("$self") );
   %$self = %$cleaned;
   return $self;
 }
@@ -99,7 +99,7 @@ Path::Class::Entity - Base class for files and directories
 
 =head1 VERSION
 
-version 0.29
+version 0.31
 
 =head1 DESCRIPTION
 

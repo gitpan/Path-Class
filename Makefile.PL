@@ -35,11 +35,12 @@ my %WriteMakefileArgs = (
     "File::stat" => 0,
     "IO::Dir" => 0,
     "IO::File" => 0,
+    "Scalar::Util" => 0,
     "base" => 0,
     "overload" => 0,
     "strict" => 0
   },
-  "VERSION" => "0.29",
+  "VERSION" => "0.31",
   "test" => {
     "TESTS" => "t/*.t"
   }
