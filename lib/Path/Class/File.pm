@@ -2,7 +2,7 @@ use strict;
 
 package Path::Class::File;
 {
-  $Path::Class::File::VERSION = '0.31';
+  $Path::Class::File::VERSION = '0.32';
 }
 
 use Path::Class::Dir;
@@ -160,7 +160,7 @@ Path::Class::File - Objects representing files
 
 =head1 VERSION
 
-version 0.31
+version 0.32
 
 =head1 SYNOPSIS
 

@@ -2,7 +2,7 @@ use strict;
 
 package Path::Class::Dir;
 {
-  $Path::Class::Dir::VERSION = '0.31';
+  $Path::Class::Dir::VERSION = '0.32';
 }
 
 use Path::Class::File;
@@ -42,7 +42,7 @@ sub new {
   }
   else {
     ($self->{volume}, my $dirs) = $s->splitpath( $s->canonpath("$first") , 1);
-    push @{$self->{dirs}}, $s->splitdir($dirs);
+    push @{$self->{dirs}}, $dirs eq $s->rootdir ? "" : $s->splitdir($dirs);
   }
 
   push @{$self->{dirs}}, map {
@@ -321,7 +321,7 @@ Path::Class::Dir - Objects representing directories
 
 =head1 VERSION
 
-version 0.31
+version 0.32
 
 =head1 SYNOPSIS
 
@@ -772,7 +772,7 @@ which it returns true will be processed by the first callback.
 
 Remaining parameters are interpreted as in traverse, in particular
 C<traverse_if(callback, sub { 1 }, @args> is equivalent to
-C<traverse(callback, @args);
+C<traverse(callback, @args)>.
 
 =item $dir->recurse( callback => sub {...} )
 

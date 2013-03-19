@@ -14,22 +14,22 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 07b1deb751872da8f69a5786810eac335fe6146f Build.PL
-SHA1 2cc050daf26acb36d3e92defc1000183de9f63e2 Changes
+SHA1 8a47d82a249ef740f9ddc1edc0a8a1967ab5af95 Build.PL
+SHA1 d483503ab40a499be572ac7b638f789289a13e5b Changes
 SHA1 3baefa5156f90435f40c793b7f071e2f89a74006 INSTALL
 SHA1 8cb63de1ae4c54a120beb97cacc1fe2efe4d266b LICENSE
 SHA1 dd5bf80ec1724df9d52ce5ffcc29753b83bd8f24 MANIFEST
-SHA1 2d2989f92d3f828743188466ccfe663cad9c9bfd META.yml
-SHA1 58e472d863d6c3d7630221cee6a6eb96bfc0cd6d Makefile.PL
-SHA1 04754d64cdf4e37d267dec53355aed3e322d7f08 README
+SHA1 22f34e51b142ffc10b6d29ec52f485a6bc2e952a META.yml
+SHA1 4949343af9acf51e1eccadd2b83b906397e74fa2 Makefile.PL
+SHA1 3746678adadf43a39aece706e4e3f9a46e447faf README
 SHA1 767e92b9cc035fc40c62a7deda816efddd4c14f2 README.pod
-SHA1 f45179b8265a7420ec4866c01c0026dc384cd962 dist.ini
-SHA1 43588aacd8369bdff1d6f1718c8b2bb7fb9a1696 lib/Path/Class.pm
-SHA1 77693b5626202ea55d4aeeaed6692a9984a63c54 lib/Path/Class/Dir.pm
-SHA1 790e51d2449029463387a21dceb969ff4f839c61 lib/Path/Class/Entity.pm
-SHA1 891aa587b1df61e364d3aa0e4ef6597bf932d7d3 lib/Path/Class/File.pm
+SHA1 9f5b9baa5682f8926bbbcac581431adf6ee35f7d dist.ini
+SHA1 d5f5e3124978e888f81f2ba2a4da1743c14fb9ef lib/Path/Class.pm
+SHA1 e3d410769736158296d337c155f8719719bce00d lib/Path/Class/Dir.pm
+SHA1 c264511acf15c1a8f0d34ee97d0b1b88836ba76a lib/Path/Class/Entity.pm
+SHA1 0042e7b87e5f61b0d999e5be18e61c2a1c9ea6bc lib/Path/Class/File.pm
 SHA1 212c128d87fa012c36016210e6e9213112fc3c23 t/01-basic.t
-SHA1 a42f4b07e4c42e7a59b960b13c5466d7cd82e17a t/02-foreign.t
+SHA1 2dc6abce3b4c4601fe22bce9b0d58cb9484bcd0f t/02-foreign.t
 SHA1 b2acb047bd89e0388273bc5703e12e2b8a6e296e t/03-filesystem.t
 SHA1 a163d4cf70142b45974ed39c78571e7ce2ba5a7f t/04-subclass.t
 SHA1 a154070d2cb1369f6cebf4228742edea39c43c63 t/05-traverse.t
@@ -40,7 +40,7 @@ SHA1 fa45d6e6ab1cd421349dea4ef527bfd5cdc8a09e t/author-critic.t
 Version: GnuPG/MacGPG2 v2.0.17 (Darwin)
 Comment: GPGTools - http://gpgtools.org
 
-iEYEARECAAYFAlERRxUACgkQgrvMBLfvlHZ97wCffrcSDG7ADjWaFJxN9tQsYxnY
-X9cAoLU9Ce0DCTDdULravmz1irq3Cugx
-=BXgD
+iEYEARECAAYFAlFHxXkACgkQgrvMBLfvlHZ/9wCfS6c7fWvewcCY9qRzQANeobwN
+2b8An1gyXrGrbCou9+PsEJyFd0UihoEX
+=IM95
 -----END PGP SIGNATURE-----

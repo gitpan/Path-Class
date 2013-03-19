@@ -30,7 +30,7 @@ my %WriteMakefileArgs = (
     "Cwd" => 0,
     "Exporter" => 0,
     "File::Path" => 0,
-    "File::Spec" => "0.87",
+    "File::Spec" => "3.26",
     "File::Temp" => 0,
     "File::stat" => 0,
     "IO::Dir" => 0,
@@ -40,7 +40,7 @@ my %WriteMakefileArgs = (
     "overload" => 0,
     "strict" => 0
   },
-  "VERSION" => "0.31",
+  "VERSION" => "0.32",
   "test" => {
     "TESTS" => "t/*.t"
   }
