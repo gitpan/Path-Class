@@ -2,14 +2,16 @@ use strict;
 
 package Path::Class::File;
 {
-  $Path::Class::File::VERSION = '0.32';
+  $Path::Class::File::VERSION = '0.33';
 }
 
 use Path::Class::Dir;
-use base qw(Path::Class::Entity);
+use parent qw(Path::Class::Entity);
 use Carp;
 
 use IO::File ();
+use Perl::OSType ();
+use File::Copy ();
 
 sub new {
   my $self = shift->SUPER::new;
@@ -74,8 +76,7 @@ sub opena { $_[0]->open('a') or croak "Can't append to $_[0]: $!" }
 sub touch {
   my $self = shift;
   if (-e $self) {
-    my $now = time();
-    utime $now, $now, $self;
+    utime undef, undef, $self;
   } else {
     $self->openw;
   }
@@ -139,6 +140,49 @@ sub remove {
   return not -e $file;
 }
 
+sub copy_to {
+  my ($self, $dest) = @_;
+  if ( UNIVERSAL::isa($dest, Path::Class::File::) ) {
+    $dest = $dest->stringify;
+    die "Can't copy to file $dest: it is a directory" if -d $dest;
+  } elsif ( UNIVERSAL::isa($dest, Path::Class::Dir::) ) {
+    $dest = $dest->stringify;
+    die "Can't copy to directory $dest: it is a file" if -f $dest;
+    die "Can't copy to directory $dest: no such directory" unless -d $dest;
+  } elsif ( ref $dest ) {
+    die "Don't know how to copy files to objects of type '".ref($self)."'";
+  }
+
+  if ( !Perl::OSType::is_os_type('Unix') ) {
+
+      return unless File::Copy::cp($self->stringify, $dest);
+
+  } else {
+
+      return unless (system('cp', $self->stringify, $dest) == 0);
+
+  }
+
+  return $self->new($dest);
+}
+
+sub move_to {
+  my ($self, $dest) = @_;
+  if (File::Copy::move($self->stringify, $dest)) {
+
+      my $new = $self->new($dest);
+
+      $self->{$_} = $new->{$_} foreach (qw/ dir file /);
+	  
+      return $self;
+
+  } else {
+
+      return;
+
+  }
+}
+
 sub traverse {
   my $self = shift;
   my ($callback, @args) = @_;
@@ -160,11 +204,11 @@ Path::Class::File - Objects representing files
 
 =head1 VERSION
 
-version 0.32
+version 0.33
 
 =head1 SYNOPSIS
 
-  use Path::Class qw(file);  # Export a short constructor
+  use Path::Class;  # Exports file() by default
   
   my $file = file('foo', 'bar.txt');  # Path::Class::File object
   my $file = Path::Class::File->new('foo', 'bar.txt'); # Same thing
@@ -388,7 +432,7 @@ a I<reading> mode.
 
 The default C<iomode> is C<r>.
 
-Lines can also be automatically splitted, mimicking the perl command-line
+Lines can also be automatically split, mimicking the perl command-line
 option C<-a> by using the C<split> parameter. If this parameter is used,
 each line will be returned as an array ref.
 
@@ -444,6 +488,14 @@ stats the link instead of the file the link points to.
 Returns the class which should be used to create directory objects.
 
 Generally overridden whenever this class is subclassed.
+
+=item $file->copy_to( $dest );
+
+Copies the C<$file> to C<$dest>.
+
+=item $file->move_to( $dest );
+
+Moves the C<$file> to C<$dest>.
 
 =back
 

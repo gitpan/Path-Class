@@ -2,12 +2,12 @@ use strict;
 
 package Path::Class::Dir;
 {
-  $Path::Class::Dir::VERSION = '0.32';
+  $Path::Class::Dir::VERSION = '0.33';
 }
 
 use Path::Class::File;
 use Carp();
-use base qw(Path::Class::Entity);
+use parent qw(Path::Class::Entity);
 
 use IO::Dir ();
 use File::Path ();
@@ -321,11 +321,11 @@ Path::Class::Dir - Objects representing directories
 
 =head1 VERSION
 
-version 0.32
+version 0.33
 
 =head1 SYNOPSIS
 
-  use Path::Class qw(dir);  # Export a short constructor
+  use Path::Class;  # Exports dir() by default
   
   my $dir = dir('foo', 'bar');       # Path::Class::Dir object
   my $dir = Path::Class::Dir->new('foo', 'bar');  # Same thing

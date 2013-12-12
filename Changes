@@ -1,5 +1,20 @@
 Revision history for Perl extension Path::Class.
 
+0.33  Wed Dec 11 21:30:35 CST 2013
+
+ - New copy_to() and move_to() methods. [Robert Rothenberg & Ken Williams]
+
+ - As advised in the utime() docs, pass undef as the time for touch().
+
+ - Do a better job cleaning up temp files in the tests.
+
+ - Optimization: use parent.pm instead of base.pm. [Olivier Mengué]
+
+ - Changed the docs to show that file() and dir() are exported by
+   default.
+
+ - Fixed spelling error in POD. [Salvatore Bonaccorso]
+
 0.32  Mon Mar 18 20:53:00 CDT 2013
 
  - Updated dependency on File::Spec to 3.26, fixing RT #83143.
@@ -77,6 +92,8 @@ Revision history for Perl extension Path::Class.
    happens. [Jesse Luehrs]
 
  - Fixed a grammar error in the docs. [Shlomi Fish]
+
+ - Moved from Google Code (SVN) to GitHub (Git).
 
 0.24  Sat May 28 20:52:39 CDT 2011
 

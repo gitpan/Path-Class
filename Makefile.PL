@@ -12,10 +12,7 @@ my %WriteMakefileArgs = (
   "ABSTRACT" => "Cross-platform path specification manipulation",
   "AUTHOR" => "Ken Williams <kwilliams\@cpan.org>",
   "BUILD_REQUIRES" => {
-    "Module::Build" => "0.3601",
-    "Test" => 0,
-    "Test::More" => 0,
-    "warnings" => 0
+    "Module::Build" => "0.3601"
   },
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30",
@@ -29,35 +26,58 @@ my %WriteMakefileArgs = (
     "Carp" => 0,
     "Cwd" => 0,
     "Exporter" => 0,
+    "File::Copy" => 0,
     "File::Path" => 0,
     "File::Spec" => "3.26",
     "File::Temp" => 0,
     "File::stat" => 0,
     "IO::Dir" => 0,
     "IO::File" => 0,
+    "Perl::OSType" => 0,
     "Scalar::Util" => 0,
-    "base" => 0,
     "overload" => 0,
+    "parent" => 0,
     "strict" => 0
   },
-  "VERSION" => "0.32",
+  "TEST_REQUIRES" => {
+    "Test" => 0,
+    "Test::More" => 0,
+    "warnings" => 0
+  },
+  "VERSION" => "0.33",
   "test" => {
     "TESTS" => "t/*.t"
   }
 );
 
 
-unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
-  my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
-  my $pp = $WriteMakefileArgs{PREREQ_PM};
-  for my $mod ( keys %$br ) {
-    if ( exists $pp->{$mod} ) {
-      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod};
-    }
-    else {
-      $pp->{$mod} = $br->{$mod};
-    }
-  }
+my %FallbackPrereqs = (
+  "Carp" => 0,
+  "Cwd" => 0,
+  "Exporter" => 0,
+  "File::Copy" => 0,
+  "File::Path" => 0,
+  "File::Spec" => "3.26",
+  "File::Temp" => 0,
+  "File::stat" => 0,
+  "IO::Dir" => 0,
+  "IO::File" => 0,
+  "Module::Build" => "0.3601",
+  "Perl::OSType" => 0,
+  "Scalar::Util" => 0,
+  "Test" => 0,
+  "Test::More" => 0,
+  "overload" => 0,
+  "parent" => 0,
+  "strict" => 0,
+  "warnings" => 0
+);
+
+
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
+  delete $WriteMakefileArgs{TEST_REQUIRES};
+  delete $WriteMakefileArgs{BUILD_REQUIRES};
+  $WriteMakefileArgs{PREREQ_PM} = \%FallbackPrereqs;
 }
 
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
