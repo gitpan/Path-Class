@@ -8,6 +8,7 @@ Makefile.PL
 README
 README.pod
 SIGNATURE
+cpanfile
 dist.ini
 lib/Path/Class.pm
 lib/Path/Class/Dir.pm
