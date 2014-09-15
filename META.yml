@@ -36,4 +36,4 @@ requires:
 resources:
   bugtracker: http://github.com/kenahoo/Path-Class/issues
   repository: git://github.com/kenahoo/Path-Class.git
-version: 0.34
+version: 0.35

@@ -18,7 +18,7 @@ my %module_build_args = (
     "Ken Williams <kwilliams\@cpan.org>"
   ],
   "dist_name" => "Path-Class",
-  "dist_version" => "0.34",
+  "dist_version" => "0.35",
   "license" => "perl",
   "module_name" => "Path::Class",
   "recommends" => {},
